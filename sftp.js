@@ -56,7 +56,7 @@ function sftp(conn, start, args, done) {
                     }
                 }, function onError(err) {
                     if (err) {
-                        results.handlePutError(err);
+                        results.handlePutError(err + '/incoming/' + id);
                     } else {
                         results.handleSingleSuccess(start);
                     }
