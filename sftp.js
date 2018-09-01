@@ -38,7 +38,7 @@ var results = require('./results.js');
 var crypto = require("crypto");
 
 // [ Core Functions ]
-function sftp(conn, start, args, done) {
+function sftp(conn, start, args, done) { 
     return conn.sftp(function(err, sftp) {
         // if an error occurred:
         if (err) {
@@ -47,20 +47,22 @@ function sftp(conn, start, args, done) {
         // if we got a good sftp connection
         } else {
             if (args.put.length > 0) {
-                var id = crypto.randomBytes(20).toString('hex');
-                sftp.fastPut(args.put, '/incoming/' + id, {
-                    step: function(totalTx, chunk, total) {
-                        //message.status("%d - %d - %d", totalTx, chunk, total);
-                        results.WORKER_TOTALS.bytes_sum += chunk;
-                    }
-                }, function onError(err) {
-                    if (err) {
-                        results.handlePutError(err + '/incoming/' + id);
-                    } else {
-                        results.handleSingleSuccess(start);
-                    }
-                    conn.end();
-                });
+                for (var i = 0; i < 11; i++) {
+                    var id = crypto.randomBytes(20).toString('hex');
+                    sftp.fastPut(args.put, '/incoming/' + id, {
+                        step: function(totalTx, chunk, total) {
+                            //message.status("%d - %d - %d", totalTx, chunk, total);
+                            results.WORKER_TOTALS.bytes_sum += chunk;
+                        }
+                    }, function onError(err) {
+                        if (err) {
+                            results.handlePutError(err + '/incoming/' + id);
+                        } else {
+                            results.handleSingleSuccess(start);
+                        }
+                        conn.end();
+                    });
+                }
             } else if (args.get.length > 0) {
                 sftp.fastGet(args.get, '/dev/null', {
                     step: function(totalTx, chunk, total) {
