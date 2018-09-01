@@ -47,7 +47,9 @@ function sftp(conn, start, args, done) {
         // if we got a good sftp connection
         } else {
             if (args.put.length > 0) {
-                sftp.fastPut(args.put, '/dev/null', {
+                var crypto = require("crypto");
+                var id = crypto.randomBytes(20).toString('hex');
+                sftp.fastPut(args.put, '/incoming/' + id, {
                     step: function(totalTx, chunk, total) {
                         //message.status("%d - %d - %d", totalTx, chunk, total);
                         results.WORKER_TOTALS.bytes_sum += chunk;
