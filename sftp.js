@@ -35,7 +35,7 @@ var _ = require('underscore');
 // [ - Project ]
 var message = require('./message.js');
 var results = require('./results.js');
-
+var crypto = require("crypto");
 
 // [ Core Functions ]
 function sftp(conn, start, args, done) {
@@ -47,7 +47,6 @@ function sftp(conn, start, args, done) {
         // if we got a good sftp connection
         } else {
             if (args.put.length > 0) {
-                var crypto = require("crypto");
                 var id = crypto.randomBytes(20).toString('hex');
                 sftp.fastPut(args.put, '/incoming/' + id, {
                     step: function(totalTx, chunk, total) {
