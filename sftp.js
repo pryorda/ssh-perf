@@ -50,7 +50,6 @@ function sftp(conn, start, args, done) {
                 var id = crypto.randomBytes(20).toString('hex');
                 sftp.fastPut(args.put, '/incoming/' + id, {
                     step: function(totalTx, chunk, total) {
-                        console.log('/incoming/' + id);
                         //message.status("%d - %d - %d", totalTx, chunk, total);
                         results.WORKER_TOTALS.bytes_sum += chunk;
                     }
